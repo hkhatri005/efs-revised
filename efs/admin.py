@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin
 
 class CustomerDetails(admin.ModelAdmin):
 
-    list_display = ['name', 'cust_number', 'address', 'city', 'state', 'email', 'cell_phone']
+    list_display = ['user', 'name', 'cust_number', 'address', 'city', 'state', 'email', 'cell_phone']
     search_fields = ['name','cust_number']
     list_filter = ['name']
 
@@ -17,7 +17,7 @@ class InvestmentDetails(admin.ModelAdmin):
 
 
 class ManagerDetails(admin.ModelAdmin):
-    list_display = ['name', 'address', 'city', 'state', 'email', 'cell_phone']
+    list_display = ['user', 'name', 'address', 'city', 'state', 'email', 'cell_phone']
 
 
 class StockDetails(admin.ModelAdmin):

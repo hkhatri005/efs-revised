@@ -20,7 +20,6 @@ class User(AbstractUser):
 
 class Manager(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    id = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=200)
     city = models.CharField(max_length=50)
@@ -46,7 +45,6 @@ class Manager(models.Model):
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    id = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=200)
     cust_number = models.IntegerField(blank=False, null=False)
