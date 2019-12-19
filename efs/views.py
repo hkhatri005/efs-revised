@@ -108,7 +108,9 @@ def investment_new(request):
 def investment_myedit(request, pk):
     invest = Investment.objects.get(user_id=pk)
     inves_id = invest.customer_id
+    print("Id is", inves_id)
     investment = get_object_or_404(Investment, customer_id=inves_id)
+    print("Investment is", investment)
     if request.method == "POST":
         form = InvestmentForm(request.POST, instance=investment)
         if form.is_valid():
@@ -116,7 +118,7 @@ def investment_myedit(request, pk):
             # investment.customer = investment.id
             investment.updated_date = timezone.now()
             investment.save()
-            return HttpResponseRedirect('/investment_mylist/')
+            return HttpResponseRedirect('/investment/%s/mylist/' % pk)
     else:
         # print("else"
         form = InvestmentForm(instance=investment)
@@ -167,7 +169,7 @@ def stock_myedit(request, pk):
             # investment.customer = investment.id
             stock.updated_date = timezone.now()
             stock.save()
-            return HttpResponseRedirect('/stock_mylist/')
+            return HttpResponseRedirect('/stock/%s/mylist/' % pk)
     else:
         # print("else"
         form = StockForm(instance=stock)
@@ -283,7 +285,7 @@ def mutualfund_myedit(request, pk):
             # investment.customer = investment.id
             mutualfund.updated_date = timezone.now()
             mutualfund.save()
-            return HttpResponseRedirect('/mutualfund_mylist/')
+            return HttpResponseRedirect('/mutualfund/%s/mylist/' % pk)
     else:
         # print("else"
         form = MutualfundForm(instance=mutualfund)
