@@ -92,7 +92,7 @@ class Investment(models.Model):
         self.save()
 
     def __str__(self):
-        return str(self.investment_id)
+        return str(self.customer)
 
     def results_by_investment(self):
         return self.recent_value - self.acquired_value
