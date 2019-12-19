@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <h1>Edit Stock</h1>
-    <form action="/url/to/submit/" method="post" class="stock-form">
+    <form action="{% url 'efs:stock_list' %}" method="post" class="stock-form">
         {% csrf_token %}
         {% bootstrap_form form %}
         {% buttons %}

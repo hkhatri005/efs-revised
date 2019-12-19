@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <h1>Edit Mutual Fund</h1>
-    <form action="/url/to/submit/" method="post" class="mutualfund-form">
+    <form action="{% url 'efs:mutualfund_list' %}" method="post" class="mutualfund-form">
         {% csrf_token %}
         {% bootstrap_form form %}
         {% buttons %}
