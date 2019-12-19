@@ -55,7 +55,7 @@
                     <td>{{ mutualfund.acquired_date }}</td>
                     <td>{{ mutualfund.recent_value }}</td>
                     <td>{{ mutualfund.recent_date }}</td>
-                     <td><a href="{% url 'efs:mutualfund_myedit' pk=mutualfund.pk %}"
+                     <td><a href="{% url 'efs:mutualfund_myedit' pk=request.user.id %}"
                            class="btn btn-warning">Edit</a></td>
                     <td><a href="{% url 'efs:mutualfund_delete' pk=mutualfund.pk %}"
                            onclick="return confirm('Are you sure you want to delete?')"

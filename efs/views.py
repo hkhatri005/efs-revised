@@ -26,54 +26,6 @@ def customer_view(request,pk):
     return render(request, 'efs/customer_view.html',
                   {'customers': customer})
 
-
-@login_required
-def personal_portfolio(request,pk):
-    cus = Customer.objects.get(user_id=pk)
-    cus_id = cus.customer_id
-    customer = [x for x in (Customer.objects.filter(customer_id=cus_id))]
-    customers = Customer.objects.filter(created_date__lte=timezone.now())
-    investments =Investment.objects.filter(customer_id=cus_id)
-    stocks = Stock.objects.filter(customer_id=cus_id)
-    mutualfunds = Mutualfund.objects.filter(customer_id=cus_id)
-
-    sum_recent_value = Investment.objects.filter(customer_id=cus_id).aggregate(Sum('recent_value'))
-    sum_acquired_value = Investment.objects.filter(customer_id=cus_id).aggregate(Sum('acquired_value'))
-
-    sum_acquired_value_mf = Mutualfund.objects.filter(customer_id=cus_id).aggregate(Sum('acquired_value'))
-    sum_recent_value_mf = Mutualfund.objects.filter(customer_id=cus_id).aggregate(Sum('recent_value'))
-
-    # overall_investment_results = sum_recent_value-sum_acquired_value
-    # Initialize the value of the stocks
-    sum_current_stocks_value = 0
-    sum_of_initial_stock_value = 0
-
-    # Loop through each stock and add the value to the total
-    for stock in stocks:
-        sum_current_stocks_value += stock.current_stock_value()
-        sum_of_initial_stock_value += stock.initial_stock_value()
-
-    portfolio_initial_investments = float(sum_of_initial_stock_value) + \
-                                    float(sum_acquired_value['acquired_value__sum']) + \
-                                    float(sum_acquired_value_mf['acquired_value__sum'])
-    portfolio_current_investments = float(sum_current_stocks_value) + \
-                                    float(sum_recent_value['recent_value__sum']) + \
-                                    float(sum_recent_value_mf['recent_value__sum'])
-
-    return render(request, 'efs/portfolio.html', {'customers': customers, 'investments': investments,
-                                                  'stocks': stocks, 'mutualfunds': mutualfunds,
-                                                  'sum_acquired_value': sum_acquired_value['acquired_value__sum'],
-                                                  'sum_recent_value': sum_recent_value['recent_value__sum'],
-                                                  'sum_acquired_value_mf': sum_acquired_value_mf['acquired_value__sum'],
-                                                  'sum_recent_value_mf': sum_recent_value_mf['recent_value__sum'],
-                                                  'sum_of_current_stocks_value': float(sum_current_stocks_value),
-                                                  'sum_of_initial_stocks_value': float(sum_of_initial_stock_value),
-                                                  'portfolio_initial_investments': portfolio_initial_investments,
-                                                  'portfolio_current_investments': portfolio_current_investments,
-                                                  })
-
-
-
 @login_required
 def customer_new(request):
     if request.method == "POST":
@@ -118,7 +70,7 @@ def customer_edit(request, pk):
 def customer_delete(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     customer.delete()
-    return redirect('portfolio:customer_list')
+    return redirect('efs:customer_list')
 
 
 @login_required
@@ -135,24 +87,6 @@ def investment_mylist(request,pk):
     investment = [x for x in (Investment.objects.filter(customer_id=inves_id))]
     return render(request, 'efs/investment_mylist.html',
                   {'investments': investment})
-
-
-@login_required
-def stock_mylist(request,pk):
-    stk = Stock.objects.get(user_id=pk)
-    stk_id = stk.customer_id
-    stock = [x for x in (Stock.objects.filter(customer_id=stk_id))]
-    return render(request, 'efs/stock_mylist.html',
-                  {'stocks': stock})
-
-@login_required
-def mutualfund_mylist(request,pk):
-    mutual = Mutualfund.objects.get(user_id=pk)
-    mutual_id = mutual.customer_id
-    mutualfund= [x for x in (Mutualfund.objects.filter(customer_id=mutual_id))]
-    return render(request, 'efs/mutualfund_mylist.html',
-                  {'mutualfunds': mutualfund})
-
 
 @login_required
 def investment_new(request):
@@ -182,9 +116,9 @@ def investment_myedit(request, pk):
             # investment.customer = investment.id
             investment.updated_date = timezone.now()
             investment.save()
-            return redirect('efs:investment_mylist')
+            return HttpResponseRedirect('/investment_mylist/')
     else:
-        # print("else")
+        # print("else"
         form = InvestmentForm(instance=investment)
     return render(request, 'efs/investment_myedit.html', {'form': form})
 
@@ -210,6 +144,78 @@ def investment_delete(request, pk):
     investment = get_object_or_404(Investment, pk=pk)
     investment.delete()
     return redirect('efs:investment_list')
+
+
+@login_required
+def stock_mylist(request,pk):
+    stk = Stock.objects.get(user_id=pk)
+    stk_id = stk.customer_id
+    stock = [x for x in (Stock.objects.filter(customer_id=stk_id))]
+    return render(request, 'efs/stock_mylist.html',
+                  {'stocks': stock})
+
+
+@login_required
+def stock_myedit(request, pk):
+    stk = Stock.objects.get(user_id=pk)
+    stk_id = stk.customer_id
+    stock = get_object_or_404(Stock, customer_id=stk_id)
+    if request.method == "POST":
+        form = StockForm(request.POST, instance=stock)
+        if form.is_valid():
+            stock = form.save()
+            # investment.customer = investment.id
+            stock.updated_date = timezone.now()
+            stock.save()
+            return HttpResponseRedirect('/stock_mylist/')
+    else:
+        # print("else"
+        form = StockForm(instance=stock)
+    return render(request, 'efs/stock_myedit.html', {'form': form})
+
+@login_required
+def stock_list(request):
+    stocks = Stock.objects.all()
+    return render(request, 'efs/stock_list.html', {'stocks': stocks})
+
+
+@login_required
+def stock_new(request):
+    if request.method == "POST":
+        form = StockForm(request.POST)
+        if form.is_valid():
+            stock = form.save(commit=False)
+            stock.created_date = timezone.now()
+            stock.save()
+            return redirect('efs:stock_list')
+    else:
+        form = StockForm()
+        # print("Else")
+    return render(request, 'efs/stock_new.html', {'form': form})
+
+
+@login_required
+def stock_edit(request, pk):
+    stock = get_object_or_404(Stock, pk=pk)
+    if request.method == "POST":
+        form = StockForm(request.POST, instance=stock)
+        if form.is_valid():
+            stock = form.save()
+            # stock.customer = stock.id
+            stock.updated_date = timezone.now()
+            stock.save()
+            return redirect('efs:stock_list')
+    else:
+        # print("else")
+        form = StockForm(instance=stock)
+    return render(request, 'efs/stock_edit.html', {'form': form})
+
+@login_required
+def stock_delete(request, pk):
+    stock = get_object_or_404(Stock, pk=pk)
+    stock.delete()
+    return redirect('efs:stock_list')
+
 
 
 @login_required
@@ -256,48 +262,34 @@ def mutualfund_delete(request, pk):
 
 
 @login_required
-def stock_list(request):
-    stocks = Stock.objects.all()
-    return render(request, 'efs/stock_list.html', {'stocks': stocks})
+def mutualfund_mylist(request,pk):
+    mutual = Mutualfund.objects.get(user_id=pk)
+    mutual_id = mutual.customer_id
+    mutualfund = [x for x in (Mutualfund.objects.filter(customer_id=mutual_id))]
+    return render(request, 'efs/mutualfund_mylist.html',
+                  {'mutualfunds': mutualfund})
+
 
 
 @login_required
-def stock_new(request):
+def mutualfund_myedit(request, pk):
+    mutual = Mutualfund.objects.get(user_id=pk)
+    mutual_id = mutual.customer_id
+    mutualfund = get_object_or_404(Mutualfund, customer_id=mutual_id)
     if request.method == "POST":
-        form = StockForm(request.POST)
+        form = MutualfundForm(request.POST, instance=mutualfund)
         if form.is_valid():
-            stock = form.save(commit=False)
-            stock.created_date = timezone.now()
-            stock.save()
-            return redirect('efs:stock_list')
+            mutualfund = form.save()
+            # investment.customer = investment.id
+            mutualfund.updated_date = timezone.now()
+            mutualfund.save()
+            return HttpResponseRedirect('/mutualfund_mylist/')
     else:
-        form = StockForm()
-        # print("Else")
-    return render(request, 'efs/stock_new.html', {'form': form})
+        # print("else"
+        form = MutualfundForm(instance=mutualfund)
+    return render(request, 'efs/mutualfund_myedit.html', {'form': form})
 
 
-@login_required
-def stock_edit(request, pk):
-    stock = get_object_or_404(Stock, pk=pk)
-    if request.method == "POST":
-        form = StockForm(request.POST, instance=stock)
-        if form.is_valid():
-            stock = form.save()
-            # stock.customer = stock.id
-            stock.updated_date = timezone.now()
-            stock.save()
-            return redirect('efs:stock_list')
-    else:
-        # print("else")
-        form = StockForm(instance=stock)
-    return render(request, 'efs/stock_edit.html', {'form': form})
-
-
-@login_required
-def stock_delete(request, pk):
-    stock = get_object_or_404(Stock, pk=pk)
-    stock.delete()
-    return redirect('efs:stock_list')
 
 @login_required
 def portfolio(request,pk):
@@ -342,4 +334,49 @@ def portfolio(request,pk):
                                                   'portfolio_current_investments': portfolio_current_investments,
                                                   })
 
+
+@login_required
+def personal_portfolio(request,pk):
+    cus = Customer.objects.get(user_id=pk)
+    cus_id = cus.customer_id
+    customer = [x for x in (Customer.objects.filter(customer_id=cus_id))]
+    customers = Customer.objects.filter(created_date__lte=timezone.now())
+    investments =Investment.objects.filter(customer_id=cus_id)
+    stocks = Stock.objects.filter(customer_id=cus_id)
+    mutualfunds = Mutualfund.objects.filter(customer_id=cus_id)
+
+    sum_recent_value = Investment.objects.filter(customer_id=cus_id).aggregate(Sum('recent_value'))
+    sum_acquired_value = Investment.objects.filter(customer_id=cus_id).aggregate(Sum('acquired_value'))
+
+    sum_acquired_value_mf = Mutualfund.objects.filter(customer_id=cus_id).aggregate(Sum('acquired_value'))
+    sum_recent_value_mf = Mutualfund.objects.filter(customer_id=cus_id).aggregate(Sum('recent_value'))
+
+    # overall_investment_results = sum_recent_value-sum_acquired_value
+    # Initialize the value of the stocks
+    sum_current_stocks_value = 0
+    sum_of_initial_stock_value = 0
+
+    # Loop through each stock and add the value to the total
+    for stock in stocks:
+        sum_current_stocks_value += stock.current_stock_value()
+        sum_of_initial_stock_value += stock.initial_stock_value()
+
+    portfolio_initial_investments = float(sum_of_initial_stock_value) + \
+                                    float(sum_acquired_value['acquired_value__sum']) + \
+                                    float(sum_acquired_value_mf['acquired_value__sum'])
+    portfolio_current_investments = float(sum_current_stocks_value) + \
+                                    float(sum_recent_value['recent_value__sum']) + \
+                                    float(sum_recent_value_mf['recent_value__sum'])
+
+    return render(request, 'efs/portfolio.html', {'customers': customers, 'investments': investments,
+                                                  'stocks': stocks, 'mutualfunds': mutualfunds,
+                                                  'sum_acquired_value': sum_acquired_value['acquired_value__sum'],
+                                                  'sum_recent_value': sum_recent_value['recent_value__sum'],
+                                                  'sum_acquired_value_mf': sum_acquired_value_mf['acquired_value__sum'],
+                                                  'sum_recent_value_mf': sum_recent_value_mf['recent_value__sum'],
+                                                  'sum_of_current_stocks_value': float(sum_current_stocks_value),
+                                                  'sum_of_initial_stocks_value': float(sum_of_initial_stock_value),
+                                                  'portfolio_initial_investments': portfolio_initial_investments,
+                                                  'portfolio_current_investments': portfolio_current_investments,
+                                                  })
 

@@ -2,8 +2,8 @@
 {% load bootstrap4 %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <h1>Edit investment</h1>
-    <form action={% url 'efs:investment_mylist' pk=request.user.id %} method="post" class="investment-form">
+    <h1>Edit Stock</h1>
+    <form action={% url 'efs:stock_mylist' pk=request.user.id %} method="post" class="stock-form">
         {% csrf_token %}
         {% bootstrap_form form %}
         {% buttons %}

@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <h1>Edit investment</h1>
-    <form action={% url 'efs:investment_mylist' pk=request.user.id %} method="post" class="investment-form">
+    <form action={% url 'efs:mutualfund_mylist' pk=request.user.id %} method="post" class="mutualfund-form">
         {% csrf_token %}
         {% bootstrap_form form %}
         {% buttons %}

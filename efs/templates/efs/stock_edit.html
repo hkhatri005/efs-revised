@@ -1,9 +1,13 @@
 {% extends 'efs/base.html' %}
+{% load bootstrap4 %}
 {% load crispy_forms_tags %}
 {% block content %}
     <h1>Edit Stock</h1>
-    <form method="POST" class="stock-form">{% csrf_token %}
-         {{ form.as_p }}
-        <button type="submit" class="save btn btn-default">Update</button>
+    <form action="/url/to/submit/" method="post" class="stock-form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        {% endbuttons %}
     </form>
 {% endblock %}
