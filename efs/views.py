@@ -132,7 +132,7 @@ def investment_edit(request, pk):
             # investment.customer = investment.id
             investment.updated_date = timezone.now()
             investment.save()
-            return HttpResponseRedirect('/efs:investment_list/')
+            return HttpResponseRedirect('/investment_list/')
     else:
         # print("else")
         form = InvestmentForm(instance=investment)
