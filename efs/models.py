@@ -75,7 +75,6 @@ class Customer(models.Model):
 
 class Investment(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    investment_id = models.AutoField(auto_created=True, primary_key=True, max_length=6, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='investments')
     category = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
@@ -101,7 +100,6 @@ class Investment(models.Model):
 
 class Stock(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    stock_id = models.AutoField(auto_created=True, primary_key=True, max_length=6, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='stocks')
     symbol = models.CharField(max_length=10)
     name = models.CharField(max_length=50)
@@ -135,9 +133,7 @@ class Stock(models.Model):
 
 class Mutualfund(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    mutualfund_id = models.AutoField(auto_created=True, primary_key=True, max_length=6, blank=True)
-    customer = models.ForeignKey(Customer, related_name='mutualfunds',
-                                 on_delete=models.DO_NOTHING)
+    customer = models.ForeignKey(Customer, related_name='mutualfunds',on_delete=models.DO_NOTHING)
     bondtype = models.CharField(max_length=10)
     description = models.CharField(max_length=200)
     acquired_value = models.DecimalField(max_digits=10, decimal_places=2)

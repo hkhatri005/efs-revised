@@ -20,20 +20,15 @@ def home(request):
 
 @login_required
 def customer_view(request,pk):
-    print(" pk of logged in user", pk)
     cus = Customer.objects.get(user_id=pk)
-    print(" object", cus)
     cus_id = cus.customer_id
-    print("Id is", cus_id)
     customer = [x for x in (Customer.objects.filter(customer_id=cus_id))]
-    print("workder assigned to worker", customer)
     return render(request, 'efs/customer_view.html',
                   {'customers': customer})
 
 
 @login_required
 def personal_portfolio(request,pk):
-    print(" pk of logged in user", pk)
     cus = Customer.objects.get(user_id=pk)
     cus_id = cus.customer_id
     customer = [x for x in (Customer.objects.filter(customer_id=cus_id))]
@@ -135,38 +130,26 @@ def investment_list(request):
 
 @login_required
 def investment_mylist(request,pk):
-    print(" pk of logged in user", pk)
     inves = Investment.objects.get(user_id=pk)
-    print(" object", inves)
     inves_id = inves.customer_id
-    print("Id is", inves_id)
     investment = [x for x in (Investment.objects.filter(customer_id=inves_id))]
-    print("Investment of customer", investment)
     return render(request, 'efs/investment_mylist.html',
                   {'investments': investment})
 
 
 @login_required
 def stock_mylist(request,pk):
-    print(" pk of logged in user", pk)
     stk = Stock.objects.get(user_id=pk)
-    print(" object", stk)
     stk_id = stk.customer_id
-    print("Id is", stk_id)
     stock = [x for x in (Stock.objects.filter(customer_id=stk_id))]
-    print("Stock assigned to", stock)
     return render(request, 'efs/stock_mylist.html',
                   {'stocks': stock})
 
 @login_required
 def mutualfund_mylist(request,pk):
-    print(" pk of logged in user", pk)
     mutual = Mutualfund.objects.get(user_id=pk)
-    print(" object", mutual)
-    mutual_id = mutual.mutualfund_id
-    print("Id is", mutual_id)
+    mutual_id = mutual.customer_id
     mutualfund= [x for x in (Mutualfund.objects.filter(customer_id=mutual_id))]
-    print("Mutual Fund assigned to", mutualfund)
     return render(request, 'efs/mutualfund_mylist.html',
                   {'mutualfunds': mutualfund})
 
