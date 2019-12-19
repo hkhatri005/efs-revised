@@ -1,0 +1,13 @@
+{% extends 'efs/base.html' %}
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1>Edit investment</h1>
+    <form action={% url 'efs:investment_myedit' pk=request.user.id %} method="post" class="investment-form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        {% endbuttons %}
+    </form>
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends 'efs/base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+    <style>
+        /* Remove the navbar's default margin-bottom and rounded borders */
+        .page-container {
+            font-weight: bold;
+            font-size: medium;
+            background: lightgrey;
+        }
+    </style>
+    {% if request.user.is_manager %}
+        <div class="col-md-12">
+
+                <h2 class="top-menu">Hello Manager, {{ user.username }},</h2>
+                <p>Please choose from below options.</p>
+
+        </div>
+    {% elif request.user.is_customer %}
+        <div class="col-md-12">
+
+                <h2 class="top-menu">Hello Customer, {{ user.username }},</h2>
+                <p>Please choose from below options.</p>
+
+        </div>
+    {% endif %}
+    <div class="content container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="links">
+                    <!-- Example row of columns -->
+                    {% if request.user.is_manager %}
+                        <div class="row">
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img src="{% static "images/customer.jpg" %}" alt="customer"/>
+                                <div class="caption">
+                                    <h2>Customer</h2>
+                                    <p>We see our success in our customers success.You grow we grow </p>
+                                    <p><a class="btn btn-primary" href="{% url 'efs:customer_list' %}"
+                                          role="button">View
+                                        details &raquo;</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img src="{% static "images/nonstock.jpg" %}" alt="non-stock"/>
+                                <div class="caption">
+                                    <h2>Investments</h2>
+                                    <p>Our team also provides advises for Non-Stock investments.</p>
+                                    <p><a class="btn btn-primary" href="{% url 'efs:investment_list' %}"
+                                          role="button">View
+                                        details &raquo;</a></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img src="{% static "images/stocks.jpg" %}" alt="stocks"/>
+                                <div class="caption">
+                                    <h2>Stocks</h2>
+                                    <p>Our Stock portfolios vary across industries.</p>
+                                    <p><a class="btn btn-primary" href="{% url 'efs:stock_list' %}"
+                                          role="button">View
+                                        details &raquo;</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img src="{% static "images/mutual funds.jpg" %}" alt="stocks"/>
+                                <div class="caption">
+                                    <h2>Mutual Fund</h2>
+                                    <p>Our Mutual funds by various industries </p>
+                                    <p><a class="btn btn-primary" href="{% url 'efs:mutualfund_list' %}"
+                                          role="button">View
+                                        details &raquo;</a></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% elif request.user.is_customer %}
+                        <div class="row">
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img src="{% static "images/portfolio.jpeg" %}" alt="customer"/>
+                                <div class="caption">
+                                    <h2>My Portfolio</h2>
+                                    <p>We see our success in our customers success.You grow we grow </p>
+                                    <p><a class="btn btn-primary" href="{% url 'efs:personal_portfolio' pk=request.user.id %}"
+                                          role="button">View
+                                        details &raquo;</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img src="{% static "images/nonstock.jpg" %}" alt="non-stock"/>
+                                <div class="caption">
+                                    <h2>Investments</h2>
+                                    <p>Our team also provides advises for Non-Stock investments.</p>
+                                    <p><a class="btn btn-primary" href="{% url 'efs:investment_mylist' pk=request.user.id %}"
+                                          role="button">View
+                                        details &raquo;</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img src="{% static "images/stocks.jpg" %}" alt="stocks"/>
+                                <div class="caption">
+                                    <h2>Stocks</h2>
+                                    <p>Our Stock portfolios vary across industries.</p>
+                                    <p><a class="btn btn-primary" href="{% url 'efs:stock_mylist' pk=request.user.id %}"
+                                          role="button">View
+                                        details &raquo;</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img src="{% static "images/mutual funds.jpg" %}" alt="stocks"/>
+                                <div class="caption">
+                                    <h2>Mutual Fund</h2>
+                                    <p>Our Mutual funds by various industries </p>
+                                    <p><a class="btn btn-primary" href="{% url 'efs:mutualfund_mylist' pk=request.user.id %}"
+                                          role="button">View
+                                        details &raquo;</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-md-10">
+
+                            <img src="{% static "images/homepage.jpg" %}" alt="stocks"/>
+                        </div>
+                    {% endif %}
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </body>
+
+        </html>
+
+{% endblock %}

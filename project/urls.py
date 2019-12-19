@@ -14,11 +14,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import views as auth_views
+from django.conf.urls import url, include
+
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
+    path('', include('efs.urls')),
+    re_path(r'^accounts/login/$', LoginView.as_view(template_name='registration/login.html'), name="login"),
+    re_path(r'^accounts/logout/$', LogoutView.as_view(), LogoutView.next_page, name="logout"),
 ]
+
 admin.site.site_header = "Eagle Financial Service Admin"
 admin.site.site_title = "Eagle Financial Service"
 admin.site.site_index_title = "Welcome to Eagle Financial Service"
+
+
+

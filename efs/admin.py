@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Manager, Customer, Investment, Stock, User
+from .models import Manager, Customer, Investment, Stock, User, Mutualfund
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -23,6 +23,12 @@ class ManagerDetails(admin.ModelAdmin):
 class StockDetails(admin.ModelAdmin):
     list_display = ['customer', 'symbol', 'name', 'shares', 'purchase_price', 'purchase_date']
 
+class MutualfundList(admin.ModelAdmin):
+    list_display = ('customer', 'bondtype', 'description', 'recent_value')
+    list_filter = ('customer', 'bondtype')
+    search_fields = ('customer', 'bondtype')
+    ordering = ['customer']
+
 
 # Register your models here.
 admin.site.register(User, UserAdmin)
@@ -30,3 +36,4 @@ admin.site.register(Manager, ManagerDetails)
 admin.site.register(Customer, CustomerDetails)
 admin.site.register(Investment, InvestmentDetails)
 admin.site.register(Stock,StockDetails)
+admin.site.register(Mutualfund, MutualfundList)

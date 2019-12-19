@@ -1,0 +1,14 @@
+{% extends 'efs/base.html' %}
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1>Add a New Mutual Fund</h1>
+    <form action="/url/to/submit/" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        {% endbuttons %}
+    </form>
+{% endblock %}
+

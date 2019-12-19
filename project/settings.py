@@ -39,9 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
+    'mathfilters',
+    'django.contrib.humanize',
+    'rest_framework',
+    'bootstrap4',
 
     'efs'
 ]
+CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -158,6 +164,9 @@ EMAIL_HOST_USER = 'YOUR HOST USER'
 EMAIL_HOST_PASSWORD = 'YOUR HOST PASSWORD'
 EMAIL_PORT = 2525
 #EMAIL_USE_TLS = True
+
+LOGIN_REDIRECT_URL = '/home'
+LOGOUT_REDIRECT_URL = '/home'
 
 
 try:

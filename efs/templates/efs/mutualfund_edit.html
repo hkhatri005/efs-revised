@@ -1,0 +1,10 @@
+{% extends 'efs/base.html' %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1>Edit Mutual Fund</h1>
+    <form method="POST" class="mutualfund-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Update</button>
+    </form>
+{% endblock %}
