@@ -1,13 +1,12 @@
 {% extends 'efs/base.html' %}
-{% load bootstrap4 %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <h1>Edit investment</h1>
-    <form action={% url 'efs:mutualfund_mylist' pk=request.user.id %} method="post" class="mutualfund-form">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        {% buttons %}
-            <button type="submit" class="btn btn-primary">Submit</button>
-        {% endbuttons %}
-    </form>
+{% load bootstrap4 %}
+    <h1>Edit Mutual Fund</h1>
+    <div class="row" >
+        <form method="POST" class="mutualfund-form" > {% csrf_token %}
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button type="submit" class="save btn btn-primary" >Update</button><br>
+        </form></div>
 {% endblock %}
