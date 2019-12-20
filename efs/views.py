@@ -65,6 +65,23 @@ def customer_edit(request, pk):
         form = CustomerForm(instance=customer)
     return render(request, 'efs/customer_edit.html', {'form': form})
 
+@login_required
+def customer_myedit(request, pk):
+    cust = Customer.objects.get(user_id=pk)
+    cust_id = cust.customer_id
+    customer = get_object_or_404(Customer, customer_id=cust_id)
+    if request.method == "POST":
+        form = CustomerForm(request.POST, instance=customer)
+        if form.is_valid():
+            customer = form.save()
+            # investment.customer = investment.id
+            customer.updated_date = timezone.now()
+            customer.save()
+            return HttpResponseRedirect('/customer/%s/view/' % pk)
+    else:
+        # print("else"
+        form = CustomerForm(instance=customer)
+    return render(request, 'efs/customer_myedit.html', {'form': form})
 
 @login_required
 def customer_delete(request, pk):
@@ -108,9 +125,7 @@ def investment_new(request):
 def investment_myedit(request, pk):
     invest = Investment.objects.get(user_id=pk)
     inves_id = invest.customer_id
-    print("Id is", inves_id)
     investment = get_object_or_404(Investment, customer_id=inves_id)
-    print("Investment is", investment)
     if request.method == "POST":
         form = InvestmentForm(request.POST, instance=investment)
         if form.is_valid():
@@ -376,7 +391,7 @@ def personal_portfolio(request,pk):
                                                   'sum_recent_value': sum_recent_value['recent_value__sum'],
                                                   'sum_acquired_value_mf': sum_acquired_value_mf['acquired_value__sum'],
                                                   'sum_recent_value_mf': sum_recent_value_mf['recent_value__sum'],
-                                                  'sum_of_current_stocks_value': float(sum_current_stocks_value),
+                                                  'sum_of_current_stocks_value  ': float(sum_current_stocks_value),
                                                   'sum_of_initial_stocks_value': float(sum_of_initial_stock_value),
                                                   'portfolio_initial_investments': portfolio_initial_investments,
                                                   'portfolio_current_investments': portfolio_current_investments,

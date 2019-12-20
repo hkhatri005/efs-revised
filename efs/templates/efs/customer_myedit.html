@@ -1,0 +1,12 @@
+{% extends 'efs/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load bootstrap4 %}
+    <h1>Edit Customer</h1>
+    <div class="row">
+        <form method="POST" class="customer-form" > {% csrf_token %}
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button type="submit" class="save btn btn-primary" >Update</button><br>
+        </form></div>
+{% endblock %}

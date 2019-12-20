@@ -55,7 +55,7 @@
                     <td>{{ customer.zipcode }}</td>
                     <td>{{ customer.email }}</td>
                     <td>{{ customer.cell_phone }}</td>
-                   <td><a href="{% url 'efs:customer_edit' pk=customer.pk %}" class="btn btn-warning">Edit</a>
+                   <td><a href="{% url 'efs:customer_myedit' pk=request.user.id %}" class="btn btn-warning">Edit</a>
 
                      <td><a href="{% url 'efs:customer_delete' pk=customer.pk %}"
                            onclick="return confirm('Are you sure you want to delete?')"
